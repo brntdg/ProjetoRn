@@ -1,110 +1,38 @@
 import React, { Component } from 'React';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
-class Botao extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-
-    let c = 1;
-    if (props.c) {
-      c = parseInt(props.c);
-    }
-
-    let bg = '#E0E0E0';
-    if (props.bg) {
-      bg = props.bg;
-    }
-
-    this.styles = StyleSheet.create({
-      area:{
-        flex:c,
-        justifyContent:'center',
-        alignItems:'center',
-        borderWidth:1,
-        borderColor:'#999999',
-        backgroundColor:bg
-      },
-      text:{
-        fontSize:18
-      }
-    });
-  }
-
-  render() {
-      return (
-        <TouchableOpacity style={this.styles.area} onPress={this.props.onPress}>
-          <Text style={this.styles.text}>{this.props.n}</Text>
-        </TouchableOpacity>
-      );
-  }
-}
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
 
 
 export default class ProjetoRn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {r:'0'};
-
-    this.btn = this.btn.bind(this);
+    this.state = {
+      flatData:[
+        {key:'1', nome:'Bruno Santos', cidade:'Santo André', estado:'São Paulo', foto:(require('./images/bruno.jpg'))},
+        {key:'2', nome:'Adriano Sousa', cidade:'Santo André', estado:'São Paulo', foto:(require('./images/Adriano.jpg'))},
+        {key:'3', nome:'Matheus Almeida', cidade:'Mauá', estado:'São Paulo', foto:(require('./images/Matheus.jpg'))},
+        {key:'4', nome:'Eric Cavalcante', cidade:'Mauá', estado:'São Paulo', foto:(require('./images/Eric.jpg'))},
+        {key:'5', nome:'Talita Angel', cidade:'São Paulo', estado:'São Paulo', foto:(require('./images/talita.jpg'))}
+      ]
+    };
   }
 
-  btn(b) {
-    let s = this.state
-
-    if (b == 'C') {
-      s.r = '0';
-    } 
-    else if(b == '=') {
-      s.r = eval(s.r);
-    } 
-    else {
-      if(s.r == '0') {
-        s.r = b;
-      } 
-      else {
-        s.r += b;
-      }
-    }
-
-    this.setState(s);
+  flatRender(item) {
+    return (
+        <View style={styles.flatItem}>
+          <Image style={styles.foto} source={item.foto} /> 
+          <View style={styles.fletArea}>
+            <Text style={styles.flatNome}>{item.nome}</Text>
+            <Text style={styles.flatInfo}>{item.cidade} - {item.estado}</Text>
+          </View>
+        </View>
+    );
   }
 
   render() {
     return(
         <View style={styles.body}>
-            <View style={styles.linha}>
-              <Text style={styles.res}>{this.state.r}</Text>
-            </View>
-            <View style={styles.linha}>
-              <Botao c='3' n='C' bg='#CCCCCC' onPress={()=>{this.btn('C')}}/>
-              <Botao n='/' bg='#fd9536' onPress={()=>{this.btn('/')}}/>
-            </View>
-            <View style={styles.linha}>
-              <Botao n='7' onPress={()=>{this.btn('7')}}/>
-              <Botao n='8' onPress={()=>{this.btn('8')}}/>
-              <Botao n='9' onPress={()=>{this.btn('9')}}/>
-              <Botao n='*' bg='#fd9536' onPress={()=>{this.btn('*')}}/>
-            </View>
-            <View style={styles.linha}>
-              <Botao n='4' onPress={()=>{this.btn('4')}}/>
-              <Botao n='5' onPress={()=>{this.btn('5')}}/>
-              <Botao n='6' onPress={()=>{this.btn('6')}}/>
-              <Botao n='-' bg='#fd9536' onPress={()=>{this.btn('-')}}/>
-            </View>
-            <View style={styles.linha}>
-              <Botao n='1' onPress={()=>{this.btn('1')}}/>
-              <Botao n='2' onPress={()=>{this.btn('2')}}/>
-              <Botao n='3' onPress={()=>{this.btn('3')}}/>
-              <Botao n='+' bg='#fd9536' onPress={()=>{this.btn('+')}}/>
-            </View>
-            <View style={styles.linha}>
-              <Botao c='2'n='0' onPress={()=>{this.btn('0')}}/>
-              <Botao n='.' onPress={()=>{this.btn('.')}}/>
-              <Botao n='=' bg='#fd9536' onPress={()=>{this.btn('=')}}/>
-            </View>
+            <FlatList data={this.state.flatData} renderItem={({item}) => this.flatRender(item)}/>
         </View>
 
       );
@@ -114,17 +42,32 @@ export default class ProjetoRn extends Component {
 const styles = StyleSheet.create({
   body:{
     paddingTop:20,
-    flex:1
-  },
-  linha:{
     flex:1,
-    flexDirection:'row'
+    backgroundColor:'#000000'
   },
-  res:{
-    backgroundColor:'#000000',
+  flatItem:{
+    padding:10,
+    borderWidth:1,
+    borderColor:'#FFFFFF',
+    height:100
+  },
+  fletArea:{
+    marginTop:-18
+  },
+  flatNome:{
+    fontSize:30,
     color:'#FFFFFF',
-    fontSize:50,
-    flex:1,
-    textAlign:'right'
+    marginLeft:90
+  },
+  flatInfo:{
+    fontSize:20,
+    color:'#FFFFFF',
+    marginLeft:90
+  },
+  foto:{
+    height:80,
+    width:80,
+    marginBottom:-60
   }
+
 });
